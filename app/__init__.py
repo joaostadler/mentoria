@@ -27,9 +27,9 @@ def create_app():
     app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB
 
 
-    @app.route("/")
-    def home():
-        return "Aplicação rodando!"
+    #@app.route("/")
+    #def home():
+        #return "Aplicação rodando!"
 
 
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)

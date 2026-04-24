@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Plataforma de Cursos{% endblock %}
+{% block content %}
+<div style="min-height:calc(100vh - 64px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:3rem 1.5rem; gap:2rem;">
+  <div>
+    <div style="font-size:3.5rem; margin-bottom:1rem;">✦</div>
+    <h1 style="font-size:3rem; font-weight:800; line-height:1.1; margin-bottom:1rem;">
+      Sua plataforma de<br><span style="color:var(--accent);">cursos online</span>
+    </h1>
+    <p style="color:var(--text-muted); font-size:1.05rem; max-width:480px; margin:0 auto 2rem;">
+      Organize cursos por tópicos e aulas. Faça upload de PDFs, vídeos e imagens. Simples e eficiente.
+    </p>
+    <div class="btn-group" style="justify-content:center;">
+      <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Começar agora</a>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-ghost">Já tenho conta</a>
+    </div>
+  </div>
+  <div style="display:flex; gap:2rem; flex-wrap:wrap; justify-content:center; margin-top:1rem;">
+    {% for feat in [('🗂', 'Tópicos organizados', 'Estruture o conteúdo em módulos e aulas'), ('📎', 'Upload de materiais', 'PDF, vídeo, imagem e muito mais'), ('🔐', 'Acesso controlado', 'Admin cria, alunos consomem')] %}
+    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem 1.5rem; width:200px; text-align:left;">
+      <div style="font-size:1.75rem; margin-bottom:0.5rem;">{{ feat[0] }}</div>
+      <h3 style="font-size:0.9rem; font-weight:700; margin-bottom:0.25rem;">{{ feat[1] }}</h3>
+      <p style="font-size:0.8rem; color:var(--text-muted);">{{ feat[2] }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

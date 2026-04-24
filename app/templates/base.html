@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Cursus{% endblock %} — Cursus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c0e14;
+      --bg2: #13161f;
+      --bg3: #1a1e2b;
+      --border: #252836;
+      --accent: #6c63ff;
+      --accent2: #ff6b6b;
+      --accent3: #43e97b;
+      --text: #e8eaf0;
+      --text-muted: #7a7f9a;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+    }
+    h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--accent); text-decoration: none; letter-spacing: -0.5px; }
+    .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.875rem; transition: all 0.15s; }
+    .nav-links a:hover { color: var(--text); background: var(--bg3); }
+    .nav-user { display: flex; align-items: center; gap: 0.5rem; }
+    .badge { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .badge-admin { background: rgba(108,99,255,0.2); color: var(--accent); border: 1px solid rgba(108,99,255,0.3); }
+    .badge-estudante { background: rgba(67,233,123,0.15); color: var(--accent3); border: 1px solid rgba(67,233,123,0.25); }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap; }
+    .page-title { font-size: 2rem; font-weight: 800; line-height: 1.1; }
+    .page-subtitle { color: var(--text-muted); margin-top: 0.4rem; font-size: 0.9rem; }
+
+    /* CARDS */
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
+    .card:hover { border-color: rgba(108,99,255,0.3); }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.25rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; border: none; text-decoration: none; transition: all 0.15s; white-space: nowrap; font-family: inherit; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #5a52e0; }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--bg3); color: var(--text); }
+    .btn-danger { background: rgba(255,107,107,0.1); color: var(--accent2); border: 1px solid rgba(255,107,107,0.2); }
+    .btn-danger:hover { background: rgba(255,107,107,0.2); }
+    .btn-sm { padding: 0.35rem 0.85rem; font-size: 0.8rem; }
+    .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    /* FORMS */
+    .form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; max-width: 680px; }
+    .form-group { margin-bottom: 1.25rem; }
+    label { display: block; font-size: 0.825rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    input[type=text], input[type=email], input[type=password], textarea, select {
+      width: 100%; padding: 0.65rem 1rem;
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: inherit; font-size: 0.9rem;
+      transition: border-color 0.15s; outline: none;
+    }
+    input:focus, textarea:focus { border-color: var(--accent); }
+    textarea { min-height: 100px; resize: vertical; }
+    .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); text-transform: none; letter-spacing: 0; }
+    input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--accent); }
+
+    /* ALERTS */
+    .alerts { position: fixed; top: 72px; right: 1.5rem; z-index: 999; display: flex; flex-direction: column; gap: 0.5rem; max-width: 360px; }
+    .alert { padding: 0.75rem 1.1rem; border-radius: 10px; font-size: 0.875rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; animation: slideIn 0.2s ease; }
+    .alert-success { background: rgba(67,233,123,0.1); border: 1px solid rgba(67,233,123,0.25); color: var(--accent3); }
+    .alert-error { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.25); color: var(--accent2); }
+    .alert-info { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.25); color: var(--accent); }
+    .alert-warning { background: rgba(255,193,7,0.1); border: 1px solid rgba(255,193,7,0.25); color: #ffc107; }
+    .alert-close { cursor: pointer; opacity: 0.6; font-size: 1rem; flex-shrink: 0; background: none; border: none; color: inherit; }
+    .alert-close:hover { opacity: 1; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+    /* UPLOAD */
+    .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(108,99,255,0.05); }
+    .upload-zone p { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem; }
+    .file-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+    .file-item { display: flex; align-items: center; gap: 0.75rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.85rem; }
+    .file-item .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-item .file-size { color: var(--text-muted); font-size: 0.75rem; flex-shrink: 0; }
+
+    /* TOPIC ACCORDION */
+    .topic-block { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 0.75rem; }
+    .topic-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; cursor: pointer; user-select: none; }
+    .topic-header:hover { background: var(--bg3); }
+    .topic-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .topic-lessons { border-top: 1px solid var(--border); display: none; }
+    .topic-lessons.open { display: block; }
+    .lesson-row { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem 0.75rem 2.5rem; border-bottom: 1px solid var(--border); transition: background 0.15s; text-decoration: none; color: var(--text); }
+    .lesson-row:last-child { border-bottom: none; }
+    .lesson-row:hover { background: var(--bg3); }
+    .lesson-row-title { font-size: 0.9rem; }
+    .lesson-actions { display: flex; gap: 0.4rem; }
+
+    /* MATERIALS */
+    .material-card { display: flex; align-items: center; gap: 1rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1.1rem; }
+    .material-icon { font-size: 1.5rem; width: 40px; text-align: center; flex-shrink: 0; }
+    .material-info { flex: 1; overflow: hidden; }
+    .material-name { font-weight: 500; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .material-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+    .materials-grid { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem; }
+
+    /* MISC */
+    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+    .tag { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tag-published { background: rgba(67,233,123,0.15); color: var(--accent3); }
+    .tag-draft { background: rgba(255,193,7,0.1); color: #ffc107; }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--border); }
+    .content-body { line-height: 1.8; color: var(--text-muted); }
+    .content-body p { margin-bottom: 1rem; }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav>
+  <a href="{{ url_for('main.dashboard') }}" class="nav-brand">✦ Cursus</a>
+  {% if current_user.is_authenticated %}
+  <div class="nav-links">
+    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('courses.list_courses') }}">Cursos</a>
+    {% if current_user.role == 'admin' %}
+    <a href="{{ url_for('courses.new_course') }}">+ Novo Curso</a>
+    {% endif %}
+  </div>
+  <div class="nav-user">
+    <span class="badge {{ 'badge-admin' if current_user.role == 'admin' else 'badge-estudante' }}">{{ current_user.role }}</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">{{ current_user.name }}</span>
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-ghost btn-sm">Sair</a>
+  </div>
+  {% else %}
+  <div class="nav-links">
+    <a href="{{ url_for('auth.login') }}" class="btn btn-ghost btn-sm">Entrar</a>
+    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Cadastrar</a>
+  </div>
+  {% endif %}
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="alerts" id="alerts">
+  {% for cat, msg in messages %}
+  <div class="alert alert-{{ cat }}">
+    <span>{{ msg }}</span>
+    <button class="alert-close" onclick="this.parentElement.remove()">✕</button>
+  </div>
+  {% endfor %}
+</div>
+<script>setTimeout(() => { const a = document.getElementById('alerts'); if(a) a.remove(); }, 5000);</script>
+{% endif %}
+{% endwith %}
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

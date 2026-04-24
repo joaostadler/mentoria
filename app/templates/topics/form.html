@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Editar' if topic else 'Novo' }} Tópico{% endblock %}
+{% block content %}
+<div class="container" style="max-width:680px;">
+  <div class="breadcrumb">
+    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <span>/</span>
+    <a href="{{ url_for('courses.view_course', course_id=course.id) }}">{{ course.title }}</a>
+    <span>/</span>
+    <span>{{ 'Editar Tópico' if topic else 'Novo Tópico' }}</span>
+  </div>
+
+  <div class="page-header">
+    <h1 class="page-title">{{ 'Editar Tópico' if topic else 'Novo Tópico' }}</h1>
+  </div>
+
+  <div class="form-card" style="max-width:100%;">
+    <form method="POST">
+      <div class="form-group">
+        <label>Título do tópico *</label>
+        <input type="text" name="title" value="{{ topic.title if topic else '' }}" placeholder="Ex: Fundamentos de Python" required>
+      </div>
+      <div class="form-group">
+        <label>Descrição (opcional)</label>
+        <textarea name="description" placeholder="O que será abordado neste tópico?">{{ topic.description if topic else '' }}</textarea>
+      </div>
+      <hr class="divider">
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">{{ '💾 Salvar' if topic else '✦ Criar tópico' }}</button>
+        <a href="{{ url_for('courses.view_course', course_id=course.id) }}" class="btn btn-ghost">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

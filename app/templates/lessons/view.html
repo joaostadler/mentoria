@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}{{ lesson.title }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:860px;">
+  <div class="breadcrumb">
+    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <span>/</span>
+    <a href="{{ url_for('courses.view_course', course_id=course.id) }}">{{ course.title }}</a>
+    <span>/</span>
+    <span style="color:var(--text-muted);">{{ topic.title }}</span>
+    <span>/</span>
+    <span>{{ lesson.title }}</span>
+  </div>
+
+  <div style="display:flex; gap:2.5rem; align-items:flex-start; flex-wrap:wrap;">
+    <!-- Main content -->
+    <div style="flex:1; min-width:280px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:0.5rem; flex-wrap:wrap;">
+        <h1 style="font-family:'Syne',sans-serif; font-size:1.75rem; font-weight:800;">{{ lesson.title }}</h1>
+        {% if current_user.role == 'admin' and course.user_id == current_user.id %}
+        <div class="btn-group">
+          <a href="{{ url_for('lessons.edit_lesson', course_id=course.id, topic_id=topic.id, lesson_id=lesson.id) }}" class="btn btn-ghost btn-sm">✏️ Editar</a>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if lesson.description %}
+      <p style="color:var(--text-muted); margin-bottom:1.5rem;">{{ lesson.description }}</p>
+      {% endif %}
+
+      {% if lesson.content %}
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h3 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:1rem;">📝 Conteúdo</h3>
+        <div class="content-body" style="white-space:pre-wrap;">{{ lesson.content }}</div>
+      </div>
+      {% endif %}
+
+      <!-- Materials -->
+      {% if lesson.materials %}
+      <div>
+        <h3 style="font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-muted); margin-bottom:0.75rem;">
+          📎 Materiais ({{ lesson.materials|length }})
+        </h3>
+        <div class="materials-grid">
+          {% for mat in lesson.materials %}
+          <div class="material-card">
+            <div class="material-icon">{{ mat.icon }}</div>
+            <div class="material-info">
+              <div class="material-name">{{ mat.original_filename }}</div>
+              <div class="material-meta">{{ mat.file_size_formatted }} · {{ mat.uploaded_at.strftime('%d/%m/%Y') }}</div>
+            </div>
+            <div style="display:flex; gap:0.4rem; flex-shrink:0;">
+              <a href="{{ url_for('lessons.serve_file', filename=mat.filename) }}" download="{{ mat.original_filename }}" class="btn btn-ghost btn-sm" title="Baixar">⬇️</a>
+              {% if current_user.role == 'admin' and course.user_id == current_user.id %}
+              <form method="POST" action="{{ url_for('lessons.delete_material', material_id=mat.id) }}"
+                    onsubmit="return confirm('Excluir este material?');">
+                <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <div class="card" style="text-align:center; padding:2rem; color:var(--text-muted);">
+        <p>Nenhum material nesta aula.</p>
+        {% if current_user.role == 'admin' and course.user_id == current_user.id %}
+        <a href="{{ url_for('lessons.edit_lesson', course_id=course.id, topic_id=topic.id, lesson_id=lesson.id) }}" style="color:var(--accent); font-size:0.875rem;">+ Adicionar materiais</a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Sidebar: lesson navigation -->
+    <div style="width:260px; flex-shrink:0;">
+      <div class="card" style="padding:1.25rem;">
+        <h3 style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:1rem;">Aulas — {{ topic.title }}</h3>
+        {% for l in topic.lessons %}
+        <a href="{{ url_for('lessons.view_lesson', course_id=course.id, topic_id=topic.id, lesson_id=l.id) }}"
+           style="display:flex; align-items:center; gap:0.6rem; padding:0.55rem 0.75rem; border-radius:8px; text-decoration:none; font-size:0.85rem; margin-bottom:2px;
+                  {{ 'background:rgba(108,99,255,0.15); color:var(--accent);' if l.id == lesson.id else 'color:var(--text-muted);' }}
+                  transition:all 0.15s;">
+          <span style="font-size:0.7rem; font-family:'Syne',sans-serif; flex-shrink:0;">{{ loop.index }}</span>
+          <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ l.title }}</span>
+        </a>
+        {% endfor %}
+        <hr class="divider">
+        <a href="{{ url_for('courses.view_course', course_id=course.id) }}" class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;">← Voltar ao curso</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Entrar{% endblock %}
+{% block content %}
+<div style="min-height:calc(100vh - 64px); display:flex; align-items:center; justify-content:center; padding:2rem;">
+  <div style="width:100%; max-width:420px;">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <h1 style="font-size:2rem; font-weight:800;">Bem-vindo de volta</h1>
+      <p style="color:var(--text-muted); margin-top:0.5rem;">Entre na sua conta para continuar</p>
+    </div>
+    <div class="form-card" style="max-width:100%;">
+      <form method="POST">
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" name="email" placeholder="seu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" name="remember"> Lembrar de mim
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Entrar</button>
+      </form>
+      <hr class="divider">
+      <p style="text-align:center; font-size:0.875rem; color:var(--text-muted);">
+        Não tem conta? <a href="{{ url_for('auth.register') }}" style="color:var(--accent);">Cadastre-se</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

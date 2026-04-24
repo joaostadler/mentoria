@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Editar' if lesson else 'Nova' }} Aula{% endblock %}
+{% block content %}
+<div class="container" style="max-width:760px;">
+  <div class="breadcrumb">
+    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <span>/</span>
+    <a href="{{ url_for('courses.view_course', course_id=course.id) }}">{{ course.title }}</a>
+    <span>/</span>
+    <span>{{ topic.title }}</span>
+    <span>/</span>
+    <span>{{ 'Editar Aula' if lesson else 'Nova Aula' }}</span>
+  </div>
+
+  <div class="page-header">
+    <h1 class="page-title">{{ 'Editar Aula' if lesson else 'Nova Aula' }}</h1>
+  </div>
+
+  <div class="form-card" style="max-width:100%;">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>Título da aula *</label>
+        <input type="text" name="title" value="{{ lesson.title if lesson else '' }}" placeholder="Ex: Variáveis e Tipos de Dados" required>
+      </div>
+      <div class="form-group">
+        <label>Resumo</label>
+        <input type="text" name="description" value="{{ lesson.description if lesson else '' }}" placeholder="Breve descrição desta aula">
+      </div>
+      <div class="form-group">
+        <label>Conteúdo / Anotações</label>
+        <textarea name="content" style="min-height:180px;" placeholder="Texto, anotações ou instruções desta aula...">{{ lesson.content if lesson else '' }}</textarea>
+      </div>
+
+      <!-- Existing materials (edit mode) -->
+      {% if lesson and lesson.materials %}
+      <div class="form-group">
+        <label>Materiais existentes</label>
+        <div class="materials-grid">
+          {% for mat in lesson.materials %}
+          <div class="material-card">
+            <div class="material-icon">{{ mat.icon }}</div>
+            <div class="material-info">
+              <div class="material-name">{{ mat.original_filename }}</div>
+              <div class="material-meta">{{ mat.file_size_formatted }}</div>
+            </div>
+            <form method="POST" action="{{ url_for('lessons.delete_material', material_id=mat.id) }}"
+                  onsubmit="return confirm('Excluir este material?');">
+              <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+            </form>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Upload zone -->
+      <div class="form-group">
+        <label>{{ 'Adicionar mais materiais' if lesson and lesson.materials else 'Materiais' }}</label>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <div style="font-size:2rem;">📁</div>
+          <p>Clique ou arraste arquivos aqui<br>
+          <small>PDF, vídeo (MP4, AVI, MOV), imagens, documentos — até 500MB por arquivo</small></p>
+          <input type="file" id="fileInput" name="materials" multiple style="display:none" onchange="updateFileList(this.files)">
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+
+      <hr class="divider">
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">{{ '💾 Salvar alterações' if lesson else '✦ Criar aula' }}</button>
+        <a href="{{ url_for('courses.view_course', course_id=course.id) }}" class="btn btn-ghost">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB';
+  if (bytes < 1073741824) return (bytes/1048576).toFixed(1) + ' MB';
+  return (bytes/1073741824).toFixed(1) + ' GB';
+}
+
+function fileIcon(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  if (ext === 'pdf') return '📄';
+  if (['mp4','avi','mov','mkv','webm'].includes(ext)) return '🎬';
+  if (['png','jpg','jpeg','gif','webp'].includes(ext)) return '🖼️';
+  return '📁';
+}
+
+function updateFileList(files) {
+  const list = document.getElementById('fileList');
+  list.innerHTML = '';
+  for (const f of files) {
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML = `<span>${fileIcon(f.name)}</span><span class="file-name">${f.name}</span><span class="file-size">${formatSize(f.size)}</span>`;
+    list.appendChild(item);
+  }
+  if (files.length > 0) {
+    document.querySelector('#uploadZone p').textContent = `${files.length} arquivo(s) selecionado(s)`;
+  }
+}
+
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+zone.addEventListener('drop', e => {
+  e.preventDefault(); zone.classList.remove('dragover');
+  const input = document.getElementById('fileInput');
+  input.files = e.dataTransfer.files;
+  updateFileList(e.dataTransfer.files);
+});
+</script>
+{% endblock %}

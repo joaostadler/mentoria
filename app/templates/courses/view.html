@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="breadcrumb">
+    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <span>/</span>
+    <span>{{ course.title }}</span>
+  </div>
+
+  <!-- Course Header -->
+  <div style="display:flex; gap:2rem; margin-bottom:2.5rem; flex-wrap:wrap;">
+    {% if course.cover_image %}
+    <div style="width:280px; flex-shrink:0; border-radius:var(--radius); overflow:hidden; height:175px;">
+      <img src="{{ url_for('lessons.serve_file', filename=course.cover_image) }}" style="width:100%; height:100%; object-fit:cover;">
+    </div>
+    {% endif %}
+    <div style="flex:1; min-width:200px;">
+      <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem; flex-wrap:wrap;">
+        <h1 class="page-title" style="margin:0;">{{ course.title }}</h1>
+        <span class="tag {{ 'tag-published' if course.is_published else 'tag-draft' }}">
+          {{ 'Publicado' if course.is_published else 'Rascunho' }}
+        </span>
+      </div>
+      {% if course.description %}
+      <p style="color:var(--text-muted); line-height:1.7; margin-bottom:1rem;">{{ course.description }}</p>
+      {% endif %}
+      <div style="display:flex; gap:1.5rem; margin-bottom:1.25rem;">
+        <span style="font-size:0.85rem; color:var(--text-muted);">🗂 <strong style="color:var(--text);">{{ course.topics_count }}</strong> tópico{{ 's' if course.topics_count != 1 }}</span>
+        <span style="font-size:0.85rem; color:var(--text-muted);">🎓 <strong style="color:var(--text);">{{ course.lessons_count }}</strong> aula{{ 's' if course.lessons_count != 1 }}</span>
+      </div>
+      {% if current_user.role == 'admin' and course.user_id == current_user.id %}
+      <div class="btn-group">
+        <a href="{{ url_for('courses.edit_course', course_id=course.id) }}" class="btn btn-ghost btn-sm">✏️ Editar curso</a>
+        <a href="{{ url_for('topics.new_topic', course_id=course.id) }}" class="btn btn-primary btn-sm">+ Novo Tópico</a>
+        <form method="POST" action="{{ url_for('courses.delete_course', course_id=course.id) }}"
+              onsubmit="return confirm('Excluir este curso e todo seu conteúdo?');" style="display:inline;">
+          <button type="submit" class="btn btn-danger btn-sm">🗑 Excluir</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Topics -->
+  <h2 style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Conteúdo do curso</h2>
+
+  {% if course.topics %}
+  {% for topic in course.topics %}
+  <div class="topic-block">
+    <div class="topic-header" onclick="toggleTopic({{ topic.id }})">
+      <div class="topic-title">
+        <span style="color:var(--accent); font-size:0.85rem; font-family:'Inter',sans-serif; font-weight:400;">{{ loop.index }}.</span>
+        {{ topic.title }}
+        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400; font-family:'Inter',sans-serif; margin-left:0.25rem;">{{ topic.lessons|length }} aula{{ 's' if topic.lessons|length != 1 }}</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        {% if current_user.role == 'admin' and course.user_id == current_user.id %}
+        <a href="{{ url_for('topics.edit_topic', course_id=course.id, topic_id=topic.id) }}" class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">✏️</a>
+        <a href="{{ url_for('lessons.new_lesson', course_id=course.id, topic_id=topic.id) }}" class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">+ Aula</a>
+        <form method="POST" action="{{ url_for('topics.delete_topic', course_id=course.id, topic_id=topic.id) }}"
+              onsubmit="return confirm('Excluir tópico e todas as aulas?');" onclick="event.stopPropagation()">
+          <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+        </form>
+        {% endif %}
+        <span id="arrow-{{ topic.id }}" style="color:var(--text-muted); transition:transform 0.2s; display:inline-block;">▼</span>
+      </div>
+    </div>
+    <div class="topic-lessons" id="lessons-{{ topic.id }}">
+      {% if topic.description %}
+      <p style="padding:0.75rem 1.25rem; font-size:0.85rem; color:var(--text-muted); border-bottom:1px solid var(--border);">{{ topic.description }}</p>
+      {% endif %}
+      {% if topic.lessons %}
+      {% for lesson in topic.lessons %}
+      <a class="lesson-row" href="{{ url_for('lessons.view_lesson', course_id=course.id, topic_id=topic.id, lesson_id=lesson.id) }}">
+        <span style="color:var(--text-muted); margin-right:0.75rem; font-size:0.8rem; font-family:'Syne',sans-serif;">{{ loop.index }}</span>
+        <span class="lesson-row-title" style="flex:1;">{{ lesson.title }}</span>
+        {% if lesson.materials %}
+        <span style="font-size:0.75rem; color:var(--text-muted);">📎 {{ lesson.materials|length }}</span>
+        {% endif %}
+        {% if current_user.role == 'admin' and course.user_id == current_user.id %}
+        <div class="lesson-actions" onclick="event.stopPropagation(); event.preventDefault();">
+          <a href="{{ url_for('lessons.edit_lesson', course_id=course.id, topic_id=topic.id, lesson_id=lesson.id) }}" class="btn btn-ghost btn-sm">✏️</a>
+          <form method="POST" action="{{ url_for('lessons.delete_lesson', course_id=course.id, topic_id=topic.id, lesson_id=lesson.id) }}"
+                onsubmit="return confirm('Excluir esta aula?');">
+            <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+          </form>
+        </div>
+        {% endif %}
+      </a>
+      {% endfor %}
+      {% else %}
+      <div style="padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.85rem;">
+        Nenhuma aula ainda.
+        {% if current_user.role == 'admin' %}
+        <a href="{{ url_for('lessons.new_lesson', course_id=course.id, topic_id=topic.id) }}" style="color:var(--accent);">Adicionar aula</a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="empty-state">
+    <div class="icon">🗂</div>
+    <h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:0.5rem;">Nenhum tópico ainda</h3>
+    {% if current_user.role == 'admin' %}
+    <p style="margin-bottom:1.5rem;">Crie o primeiro tópico para organizar as aulas.</p>
+    <a href="{{ url_for('topics.new_topic', course_id=course.id) }}" class="btn btn-primary">+ Criar tópico</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+<script>
+function toggleTopic(id) {
+  const lessons = document.getElementById('lessons-' + id);
+  const arrow = document.getElementById('arrow-' + id);
+  const open = lessons.classList.toggle('open');
+  arrow.style.transform = open ? 'rotate(180deg)' : '';
+}
+// Auto-open first topic
+document.addEventListener('DOMContentLoaded', () => {
+  const first = document.querySelector('.topic-lessons');
+  if (first) {
+    first.classList.add('open');
+    const arrow = document.querySelector('[id^="arrow-"]');
+    if (arrow) arrow.style.transform = 'rotate(180deg)';
+  }
+});
+</script>
+{% endblock %}

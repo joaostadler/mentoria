@@ -14,14 +14,14 @@ bcrypt = Bcrypt()
 def create_app():
     #app = Flask(__name__)
     #app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-   # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cursus.db'
+   # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///js-mentoria.db'
    # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
    # app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
    # app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','sqlite:///cursus.db')
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cursus.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','sqlite:///js-mentoria.db')
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///js-mentoria.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
     app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB
@@ -54,8 +54,7 @@ def create_app():
     app.register_blueprint(topics_bp)
     app.register_blueprint(lessons_bp)
 
-    #with app.app_context():
-    #    db.create_all()
-    
+    with app.app_context():
+        db.create_all()
 
     return app

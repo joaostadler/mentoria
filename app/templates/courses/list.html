@@ -22,12 +22,12 @@
           <img src="{{ url_for('lessons.serve_file', filename=course.cover_image) }}" style="width:100%; height:100%; object-fit:cover;">
         </div>
         {% else %}
-        <div style="height:140px; border-radius:8px; background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(255,107,107,0.08)); display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📚</div>
+        <div style="height:140px; border-radius:8px; background:linear-gradient(135deg,rgba(45,158,88,0.15),rgba(26,173,82,0.08)); display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📚</div>
         {% endif %}
         <div style="flex:1;">
           <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; flex-wrap:wrap;">
             <h3 style="font-size:1rem; font-weight:700;">{{ course.title }}</h3>
-            <span class="tag {{ 'tag-published' if course.is_published else 'tag-draft' }}">{{ 'Publicado' if course.is_published else 'Rascunho' }}</span>
+            <span class="tag {{ 'tag-published' if course.access_count else 'tag-draft' }}">{{ course.access_count ~ ' aluno' ~ ('s' if course.access_count != 1) if course.access_count else 'Sem acesso' }}</span>
           </div>
           {% if course.description %}
           <p style="color:var(--text-muted); font-size:0.82rem; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">{{ course.description }}</p>

@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Cursus{% endblock %} — Cursus</title>
+  <title>{% block title %}JS Mentoria{% endblock %} — JS Mentoria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0c0e14;
-      --bg2: #13161f;
-      --bg3: #1a1e2b;
-      --border: #252836;
-      --accent: #6c63ff;
-      --accent2: #ff6b6b;
-      --accent3: #43e97b;
-      --text: #e8eaf0;
-      --text-muted: #7a7f9a;
+      --bg: #f2fbf5;
+      --bg2: #ffffff;
+      --bg3: #e4f5ea;
+      --border: #b8ddc4;
+      --accent: #2d9e58;
+      --accent2: #e05555;
+      --accent3: #1aad52;
+      --text: #14291e;
+      --text-muted: #517a62;
       --radius: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,8 +43,8 @@
     .nav-links a:hover { color: var(--text); background: var(--bg3); }
     .nav-user { display: flex; align-items: center; gap: 0.5rem; }
     .badge { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .badge-admin { background: rgba(108,99,255,0.2); color: var(--accent); border: 1px solid rgba(108,99,255,0.3); }
-    .badge-estudante { background: rgba(67,233,123,0.15); color: var(--accent3); border: 1px solid rgba(67,233,123,0.25); }
+    .badge-admin { background: rgba(45,158,88,0.15); color: var(--accent); border: 1px solid rgba(45,158,88,0.3); }
+    .badge-estudante { background: rgba(26,173,82,0.12); color: var(--accent3); border: 1px solid rgba(26,173,82,0.25); }
 
     /* LAYOUT */
     .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
@@ -54,17 +54,17 @@
 
     /* CARDS */
     .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
-    .card:hover { border-color: rgba(108,99,255,0.3); }
+    .card:hover { border-color: rgba(45,158,88,0.5); }
     .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
 
     /* BUTTONS */
     .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.25rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; border: none; text-decoration: none; transition: all 0.15s; white-space: nowrap; font-family: inherit; }
     .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: #5a52e0; }
+    .btn-primary:hover { background: #237a44; }
     .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
     .btn-ghost:hover { background: var(--bg3); color: var(--text); }
-    .btn-danger { background: rgba(255,107,107,0.1); color: var(--accent2); border: 1px solid rgba(255,107,107,0.2); }
-    .btn-danger:hover { background: rgba(255,107,107,0.2); }
+    .btn-danger { background: rgba(224,85,85,0.08); color: var(--accent2); border: 1px solid rgba(224,85,85,0.2); }
+    .btn-danger:hover { background: rgba(224,85,85,0.16); }
     .btn-sm { padding: 0.35rem 0.85rem; font-size: 0.8rem; }
     .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
@@ -86,17 +86,17 @@
     /* ALERTS */
     .alerts { position: fixed; top: 72px; right: 1.5rem; z-index: 999; display: flex; flex-direction: column; gap: 0.5rem; max-width: 360px; }
     .alert { padding: 0.75rem 1.1rem; border-radius: 10px; font-size: 0.875rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; animation: slideIn 0.2s ease; }
-    .alert-success { background: rgba(67,233,123,0.1); border: 1px solid rgba(67,233,123,0.25); color: var(--accent3); }
-    .alert-error { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.25); color: var(--accent2); }
-    .alert-info { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.25); color: var(--accent); }
-    .alert-warning { background: rgba(255,193,7,0.1); border: 1px solid rgba(255,193,7,0.25); color: #ffc107; }
+    .alert-success { background: rgba(26,173,82,0.1); border: 1px solid rgba(26,173,82,0.25); color: var(--accent3); }
+    .alert-error { background: rgba(224,85,85,0.08); border: 1px solid rgba(224,85,85,0.2); color: var(--accent2); }
+    .alert-info { background: rgba(45,158,88,0.1); border: 1px solid rgba(45,158,88,0.25); color: var(--accent); }
+    .alert-warning { background: rgba(180,130,0,0.08); border: 1px solid rgba(180,130,0,0.2); color: #8a6500; }
     .alert-close { cursor: pointer; opacity: 0.6; font-size: 1rem; flex-shrink: 0; background: none; border: none; color: inherit; }
     .alert-close:hover { opacity: 1; }
     @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
     /* UPLOAD */
     .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
-    .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(108,99,255,0.05); }
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(45,158,88,0.05); }
     .upload-zone p { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem; }
     .file-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
     .file-item { display: flex; align-items: center; gap: 0.75rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.85rem; }
@@ -129,21 +129,31 @@
     .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
     .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
     .tag { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .tag-published { background: rgba(67,233,123,0.15); color: var(--accent3); }
-    .tag-draft { background: rgba(255,193,7,0.1); color: #ffc107; }
+    .tag-published { background: rgba(26,173,82,0.15); color: var(--accent3); }
+    .tag-draft { background: rgba(180,130,0,0.1); color: #8a6500; }
     .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-wrap: wrap; }
     .breadcrumb a { color: var(--text-muted); text-decoration: none; }
     .breadcrumb a:hover { color: var(--accent); }
     .breadcrumb span { color: var(--border); }
     .content-body { line-height: 1.8; color: var(--text-muted); }
     .content-body p { margin-bottom: 1rem; }
+
+    /* USER CHECKLIST */
+    .user-checklist { display: flex; flex-direction: column; gap: 0.4rem; max-height: 280px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem; background: var(--bg3); }
+    .user-check-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0.75rem; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
+    .user-check-item:hover { background: var(--bg2); }
+    .user-check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; }
+    .user-check-info { display: flex; flex-direction: column; gap: 1px; }
+    .user-check-name { font-size: 0.875rem; font-weight: 500; color: var(--text); }
+    .user-check-email { font-size: 0.75rem; color: var(--text-muted); }
+    .user-checklist-empty { font-size: 0.875rem; color: var(--text-muted); padding: 0.75rem 1rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; }
   </style>
   {% block extra_head %}{% endblock %}
 </head>
 <body>
 
 <nav>
-  <a href="{{ url_for('main.dashboard') }}" class="nav-brand">✦ Cursus</a>
+  <a href="{{ url_for('main.dashboard') }}" class="nav-brand">✦ JS Mentoria</a>
   {% if current_user.is_authenticated %}
   <div class="nav-links">
     <a href="{{ url_for('main.dashboard') }}">Dashboard</a>

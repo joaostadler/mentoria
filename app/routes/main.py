@@ -8,8 +8,11 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     if current_user.is_authenticated:
-        return render_template('main/dashboard.html',
-                               courses=Course.query.filter_by(is_published=True).all())
+        if current_user.role == 'admin':
+            courses = Course.query.filter_by(user_id=current_user.id).all()
+        else:
+            courses = current_user.granted_courses.all()
+        return render_template('main/dashboard.html', courses=courses)
     return render_template('main/index.html')
 
 
@@ -19,5 +22,5 @@ def dashboard():
     if current_user.role == 'admin':
         courses = Course.query.filter_by(user_id=current_user.id).order_by(Course.created_at.desc()).all()
     else:
-        courses = Course.query.filter_by(is_published=True).order_by(Course.created_at.desc()).all()
+        courses = current_user.granted_courses.order_by(Course.created_at.desc()).all()
     return render_template('main/dashboard.html', courses=courses)

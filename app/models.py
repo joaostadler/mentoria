@@ -24,6 +24,13 @@ class User(db.Model, UserMixin):
         return f'<User {self.email}>'
 
 
+course_access = db.Table('course_access',
+    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    schema='mentoria'
+)
+
+
 class Course(db.Model):
     __tablename__ = 'courses'
     __table_args__ = {'schema': 'mentoria'}
@@ -37,6 +44,7 @@ class Course(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     topics = db.relationship('Topic', backref='course', lazy=True, cascade='all, delete-orphan', order_by='Topic.order')
+    allowed_users = db.relationship('User', secondary=course_access, backref=db.backref('granted_courses', lazy='dynamic'))
 
     def __repr__(self):
         return f'<Course {self.title}>'
@@ -48,6 +56,10 @@ class Course(db.Model):
     @property
     def topics_count(self):
         return len(self.topics)
+
+    @property
+    def access_count(self):
+        return len(self.allowed_users)
 
 
 class Topic(db.Model):

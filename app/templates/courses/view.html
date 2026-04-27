@@ -18,8 +18,8 @@
     <div style="flex:1; min-width:200px;">
       <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem; flex-wrap:wrap;">
         <h1 class="page-title" style="margin:0;">{{ course.title }}</h1>
-        <span class="tag {{ 'tag-published' if course.is_published else 'tag-draft' }}">
-          {{ 'Publicado' if course.is_published else 'Rascunho' }}
+        <span class="tag {{ 'tag-published' if course.access_count else 'tag-draft' }}">
+          {{ course.access_count ~ ' aluno' ~ ('s' if course.access_count != 1) if course.access_count else 'Sem acesso' }}
         </span>
       </div>
       {% if course.description %}

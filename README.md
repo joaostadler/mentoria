@@ -1,4 +1,4 @@
-# Cursus — Plataforma de Cursos Online
+# JS Mentoria — Plataforma de Cursos Online
 
 Sistema web para gerenciamento de cursos educacionais com suporte a tópicos, aulas e upload de materiais.
 
@@ -14,7 +14,7 @@ Sistema web para gerenciamento de cursos educacionais com suporte a tópicos, au
 ## Estrutura do Projeto
 
 ```
-cursus/
+js-mentoria/
 ├── run.py                     # Ponto de entrada
 ├── requirements.txt
 └── app/
@@ -42,7 +42,7 @@ cursus/
 ### 1. Clone ou baixe o projeto
 
 ```bash
-cd cursus
+cd js-mentoria
 ```
 
 ### 2. Crie e ative o ambiente virtual
@@ -82,7 +82,7 @@ Acesse: **http://localhost:5000**
 
 ## Banco de Dados
 
-O banco SQLite é criado automaticamente em `app/cursus.db` na primeira execução. Nenhuma configuração extra necessária.
+O banco SQLite é criado automaticamente em `app/js-mentoria.db` na primeira execução. Nenhuma configuração extra necessária.
 
 ## Variáveis de Ambiente (Opcional)
 

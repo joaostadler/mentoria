@@ -64,13 +64,13 @@
                  style="width:100%; height:100%; object-fit:cover;" alt="">
           </div>
           {% else %}
-          <div style="height:140px; border-radius:8px; background:linear-gradient(135deg,rgba(108,99,255,0.2),rgba(255,107,107,0.1)); display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📚</div>
+          <div style="height:140px; border-radius:8px; background:linear-gradient(135deg,rgba(45,158,88,0.15),rgba(26,173,82,0.08)); display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📚</div>
           {% endif %}
           <div style="flex:1;">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.5rem;">
               <h3 style="font-size:1rem; font-weight:700; line-height:1.3;">{{ course.title }}</h3>
-              <span class="tag {{ 'tag-published' if course.is_published else 'tag-draft' }}">
-                {{ 'Publicado' if course.is_published else 'Rascunho' }}
+              <span class="tag {{ 'tag-published' if course.access_count else 'tag-draft' }}">
+                {{ course.access_count ~ ' aluno' ~ ('s' if course.access_count != 1) if course.access_count else 'Sem acesso' }}
               </span>
             </div>
             {% if course.description %}
@@ -118,7 +118,7 @@
     color: var(--text);
   }
   .sidebar-link.active {
-    background: rgba(108,99,255,0.15);
+    background: rgba(45,158,88,0.12);
     color: var(--accent);
     font-weight: 500;
   }
